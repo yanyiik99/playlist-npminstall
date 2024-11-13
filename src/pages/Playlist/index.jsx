@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Row, Card, List, Typography, Badge, Input, Layout, FloatButton, Modal, Button, Form, Select, Image} from 'antd';
+import { Col, Row, Card, List, Typography, Badge, Input, Layout, FloatButton, Modal, Button, Form, Select, Image, notification} from 'antd';
 import { SearchOutlined, PlusCircleOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import Logo from '../../assets/Npm-logo.svg';
-import { getDataUTS } from '../../utils/apiuts';
+import { getDataUTS, sendDataUTS } from '../../utils/apiuts';
 
 const { Meta } = Card;
 const { Text, Link } = Typography;
@@ -30,7 +30,15 @@ const Playlist = () => {
   const [dataPlaylist, setDataPlaylist] = useState([]);
   const urlPlaylist = '/api/playlist/5';
 
-  
+  const [form] = Form.useForm();
+  const [api, contextHolder] = notification.useNotification();
+
+  const showAlert = (status, title, description) => {
+    api[status]({
+      message: title,
+      description: description
+    })
+  }
 
   // MODAL
   const showModal = () => {
@@ -42,7 +50,6 @@ const Playlist = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-
 
   const getDataPlaylist = () => {
     getDataUTS(urlPlaylist)
@@ -63,9 +70,45 @@ const Playlist = () => {
     getDataPlaylist();
   },[])
 
+  const handleSubmit = () => {
+    let playName = form.getFieldValue("play_name")
+    let playGenre = form.getFieldValue("play_genre")
+    let playUrl = form.getFieldValue("play_url")
+    let playDescription = form.getFieldValue("play_description")
+    let playThumbnail = form.getFieldValue("play_thumbnail")
+
+    let formData = new FormData()
+    formData.append("play_name", playName)
+    formData.append("play_genre", playGenre)
+    formData.append("play_url", playUrl)
+    formData.append("play_description", playDescription)
+    formData.append("play_thumbnail", playThumbnail)
+
+    let url = "/api/playlist/5";
+    let request = sendDataUTS(url, formData);
+
+    request
+      .then((resp) => {
+        if(resp?.datas) {
+          showAlert(
+            "success", "Data Terkirim", "Data Berhasil Disimpan"
+          );
+          form.resetFields();
+          getDataPlaylist();
+          setIsModalOpen(false);
+        } else {
+          showAlert("error", "Gagal Terkirim", "Data Tidak Berhasil Dikirim");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        showAlert("error", "Gagal Terkirim", "Koneksi ke API Tidak Berhasil");
+      })
+  };
 
   return (
     <div className='layout-content bg-gray-950 px-20 min-h-screen'>      
+    {contextHolder}
         <Layout className='bg-gray-950'>
           <Header style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '50px 0px'}} className='bg-gray-950'>
             <img src={Logo} alt="" className='demo-logo' style={{ maxWidth: '70px' }}/>
@@ -78,7 +121,6 @@ const Playlist = () => {
               tooltip={<div>Add Playlist</div>}  
               onClick={showModal}            
             />
-
             {/* <Modal title="ADD PLAYLIST" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
               <Form layout="vertical">
                 <Form.Item label="Playlist Name" name="play_name" required style={{ marginTop: '20px' }}>
@@ -109,7 +151,8 @@ const Playlist = () => {
               </Form>
             </Modal> */}
 
-            <Modal title="EDIT PLAYLIST" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+
+            <Modal title="ADD PLAYLIST" open={isModalOpen} onOk={handleSubmit} onCancel={handleCancel}>
               <Form layout="vertical">
                 <Form.Item label="Playlist Name" name="play_name" required style={{ marginTop: '20px' }}>
                   <Input/>
