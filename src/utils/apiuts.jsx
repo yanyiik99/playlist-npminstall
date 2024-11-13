@@ -1,4 +1,4 @@
-const BASE_URL = "http://127.0.0.1:8001";
+const BASE_URL = "https://webfmsi.singapoly.com";
 
 export const loadImage = (image_path) => {
   return BASE_URL + "/public" + image_path;

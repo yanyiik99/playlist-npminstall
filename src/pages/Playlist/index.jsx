@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { Col, Row, Card, List, Typography, Badge, Input, Layout, FloatButton, Modal, Button, Form, Select} from 'antd';
-import { SearchOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import React, { useEffect, useState } from 'react';
+import { Col, Row, Card, List, Typography, Badge, Input, Layout, FloatButton, Modal, Button, Form, Select, Image} from 'antd';
+import { SearchOutlined, PlusCircleOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import Logo from '../../assets/Npm-logo.svg';
+import { getDataUTS } from '../../utils/apiuts';
 
 const { Meta } = Card;
 const { Text, Link } = Typography;
@@ -25,6 +26,13 @@ const dataGenre = [
 const Playlist = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [dataPlaylist, setDataPlaylist] = useState([]);
+  const urlPlaylist = '/api/playlist/5';
+
+  
+
+  // MODAL
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -34,6 +42,27 @@ const Playlist = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
+
+  const getDataPlaylist = () => {
+    getDataUTS(urlPlaylist)
+    .then((ress)=>{
+      if(ress?.datas){
+        setIsLoading(false);
+        setDataPlaylist(ress?.datas);
+      }else{
+        console.log(ress);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
+  useEffect(()=>{
+    getDataPlaylist();
+  },[])
+
 
   return (
     <div className='layout-content bg-gray-950 px-20 min-h-screen'>      
@@ -156,24 +185,20 @@ const Playlist = () => {
                   lg: 3,
                   xl: 4
                 }}
-                dataSource={dataDummy}
+                dataSource={dataPlaylist}
                 renderItem={(item) => (
                   <List.Item>
                     <Link href={item?.play_url} target="_blank">
-                    <Card
+                    <Card 
                       hoverable 
+                      actions={[
+                        <DeleteOutlined key="delete" />,
+                        <EditOutlined key="edit" onClick={()=>showModal()} />,
+                      ]}
+                      cover={<img className='p-4 !rounded-lg' alt="img" src={item?.play_thumbnail} />}
                     >
                       <Badge count={item?.play_genre} showZero color="#faad14" />
-                      <Meta 
-                        title=
-                        {<Typography.Title 
-                          level={3}
-                          style={{
-                            marginTop: 10,
-                          }}
-                          >
-                          {item?.play_name}
-                        </Typography.Title>}
+                      <Meta title={<Typography.Title level={3} style={{marginTop: 10,}}>{item?.play_name}</Typography.Title>}
                         description={
                           <div style={{ marginTop: '-10px' }}>
                             <Text type="secondary">
