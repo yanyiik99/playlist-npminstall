@@ -79,7 +79,37 @@ const Playlist = () => {
               onClick={showModal}            
             />
 
-            <Modal title="ADD PLAYLIST" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+            {/* <Modal title="ADD PLAYLIST" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+              <Form layout="vertical">
+                <Form.Item label="Playlist Name" name="play_name" required style={{ marginTop: '20px' }}>
+                  <Input/>
+                </Form.Item>
+
+                <Form.Item label="Playlist Genre" name="play_genre" required style={{ marginTop: '-15px' }}>
+                  <Select
+                    defaultValue="---"
+                    style={{
+                      
+                    }}
+                    options={dataGenre}
+                  />
+                </Form.Item>
+
+                <Form.Item label="Playlist URL" name="play_url" required style={{ marginTop: '-15px' }}>
+                  <Input/>
+                </Form.Item>
+
+                <Form.Item label="Playlist Thumbnail" name="play_thumbnail" required style={{ marginTop: '-15px' }}>
+                  <Input/>
+                </Form.Item>
+
+                <Form.Item label="Playlist Descriptions" name="play_description" required style={{ marginTop: '-15px' }}>
+                  <Input.TextArea rows={4}/>
+                </Form.Item>
+              </Form>
+            </Modal> */}
+
+            <Modal title="EDIT PLAYLIST" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
               <Form layout="vertical">
                 <Form.Item label="Playlist Name" name="play_name" required style={{ marginTop: '20px' }}>
                   <Input/>
@@ -188,27 +218,25 @@ const Playlist = () => {
                 dataSource={dataPlaylist}
                 renderItem={(item) => (
                   <List.Item>
-                    <Link href={item?.play_url} target="_blank">
-                    <Card 
-                      hoverable 
-                      actions={[
-                        <DeleteOutlined key="delete" />,
-                        <EditOutlined key="edit" onClick={()=>showModal()} />,
-                      ]}
-                      cover={<img className='p-4 !rounded-lg' alt="img" src={item?.play_thumbnail} />}
-                    >
-                      <Badge count={item?.play_genre} showZero color="#faad14" />
-                      <Meta title={<Typography.Title level={3} style={{marginTop: 10,}}>{item?.play_name}</Typography.Title>}
-                        description={
-                          <div style={{ marginTop: '-10px' }}>
-                            <Text type="secondary">
-                              {item?.play_description}
-                            </Text>
-                          </div>
-                        }
-                      />
-                    </Card>
-                    </Link>
+                      <Card 
+                        hoverable 
+                        actions={[
+                          <DeleteOutlined key="delete" />,
+                          <EditOutlined key="edit" onClick={()=>showModal()} />,
+                        ]}
+                        cover={<img className='p-4 !rounded-lg' alt="img" src={item?.play_thumbnail} />}
+                      >
+                        <Badge count={item?.play_genre} showZero color="#faad14" />
+                        <Meta title={<Link level={3} style={{marginTop: 10,}}>{item?.play_name}</Link>}
+                          description={
+                            <div style={{ marginTop: '-10px' }}>
+                              <Text type="secondary">
+                                {item?.play_description}
+                              </Text>
+                            </div>
+                          }
+                        />
+                      </Card>
                   </List.Item>
                 )}
               />   
