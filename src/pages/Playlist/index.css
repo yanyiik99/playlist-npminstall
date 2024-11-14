@@ -17,3 +17,7 @@
     word-wrap: break-word !important;
     overflow-wrap: break-word !important;
 }
+
+.ant-picker-input input::placeholder {
+    color: #f0f0f0 !important;
+  }

@@ -5,17 +5,11 @@ import Logo from '../../assets/Npm-logo.svg';
 import { deleteDataUTS, getDataUTS, sendDataUTS } from '../../utils/apiuts';
 import classNames from 'classnames';
 import './index.css';
+import { useNavigate } from 'react-router-dom';
 
 const { Meta } = Card;
 const { Text, Link } = Typography;
 const { Header, Content, Footer } = Layout;
-
-// const dataDummy = [
-//   {id_play: 1, play_name: "02 Test Playlist", play_genre: "music", play_url: "02 Test URL", play_description: "02 test Description", play_thumbnail: "Thumbnail", created_at: "2024-11-08T08:57:27.000000Z", updated_at: "2024-11-08T08:57:27.000000Z"},
-//   {id_play: 2, play_name: "02 Test Playlist", play_genre: "music", play_url: "02 Test URL", play_description: "02 test Description", play_thumbnail: "Thumbnail", created_at: "2024-11-08T08:57:27.000000Z", updated_at: "2024-11-08T08:57:27.000000Z"},
-//   {id_play: 3, play_name: "02 Test Playlist", play_genre: "music", play_url: "02 Test URL", play_description: "02 test Description", play_thumbnail: "Thumbnail", created_at: "2024-11-08T08:57:27.000000Z", updated_at: "2024-11-08T08:57:27.000000Z"},
-//   {id_play: 4, play_name: "02 Test Playlist", play_genre: "music", play_url: "02 Test URL", play_description: "02 test Description", play_thumbnail: "Thumbnail", created_at: "2024-11-08T08:57:27.000000Z", updated_at: "2024-11-08T08:57:27.000000Z"}, 
-// ]
 
 const dataGenre = [
   {id: 0, label: "All", value: "all"},
@@ -30,6 +24,7 @@ const Playlist = () => {
 
   // General State
   const [form] = Form.useForm();
+  const navigate = useNavigate();
   const [api, contextHolder] = notification.useNotification();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -52,11 +47,13 @@ const Playlist = () => {
 
   // Show Modal
   const showModal = () => {
+    form.resetFields();
     setIsModalOpen(true);
   };
   
   // Close Modal
   const handleCancel = () => {
+    form.resetFields();
     setIsModalOpen(false);
   };
 
@@ -77,7 +74,7 @@ const Playlist = () => {
 
   useEffect(()=>{
     getDataPlaylist();
-  },[activeTabs])
+  },[])
 
   const handleSubmit = () => {
     let playName = form.getFieldValue("play_name")
@@ -92,19 +89,19 @@ const Playlist = () => {
     formData.append("play_url", playUrl)
     formData.append("play_description", playDescription)
     formData.append("play_thumbnail", playThumbnail)
-
+    
     let url = isEdit ? `/api/playlist/update/${idSelected}` : "/api/playlist/5";
     let request = sendDataUTS(url, formData);
 
     request
       .then((resp) => {
+        setIsModalOpen(false);
         if(resp?.datas) {
           showAlert(
             "success", "Data Terkirim", "Data Berhasil Disimpan"
           );
           form.resetFields();
           getDataPlaylist();
-          setIsModalOpen(false);
         } else {
           showAlert("error", "Gagal Terkirim", "Data Tidak Berhasil Dikirim");
         }
@@ -117,6 +114,7 @@ const Playlist = () => {
 
 
   const handleEditData = (item) => {
+    form.resetFields();
     setIsEdit(true);
     setIsModalOpen(true);
     setIdSelected(item?.id_play);
@@ -151,7 +149,6 @@ const Playlist = () => {
 
   const tabsFiltered = (item) => {
     setActiveTabs(item?.value);
-    filteredData("tabs");
   }
 
   const handleSearchPlaylist = (e) => {
@@ -176,19 +173,51 @@ const Playlist = () => {
               type="primary"
               icon={<PlusCircleOutlined/>}
               tooltip={<div>Add Playlist</div>}  
-              onClick={showModal}            
+              onClick={()=>{
+                setIsEdit(false);
+                showModal();
+              }}            
             />
 
-            <Modal title="ADD PLAYLIST" style={{ fontFamily: 'Poppins' }} open={isModalOpen} onOk={handleSubmit} onCancel={handleCancel}>
+            <Modal 
+              title={`${isEdit ? 'EDIT' : 'ADD'} PLAYLIST`}
+              style={{ fontFamily: 'Poppins' }} 
+              open={isModalOpen} 
+              onOk={()=>{
+                form
+                .validateFields()
+                .then(handleSubmit)
+                .catch((err) => {
+                  console.log(err);
+                })
+                
+              }} 
+              onCancel={handleCancel}
+            >
               <Form 
                 layout="vertical"
+                requiredMark={true}
                 form={form}
               >
-                <Form.Item label="Playlist Name" name="play_name" required style={{ marginTop: '20px', fontFamily: 'Poppins' }}>
+                <Form.Item 
+                  label="Playlist Name" 
+                  name="play_name" 
+                  style={{ marginTop: '20px', fontFamily: 'Poppins' }} 
+                  rules={[
+                    {required: true, message: "Playlist Name Wajib Diisi"}
+                  ]}
+                >
                   <Input maxLength="30" style={{ fontFamily: 'Montserrat' }}/>
                 </Form.Item>
 
-                <Form.Item label="Playlist Genre" name="play_genre" required style={{ marginTop: '-15px' }}>
+                <Form.Item 
+                  label="Playlist Genre" 
+                  name="play_genre" 
+                  style={{ marginTop: '-15px' }}
+                  rules={[
+                    {required: true, message: "Genre Wajib Diisi"}
+                  ]}
+                >
                   <Select
                     defaultValue="---"
                     options={dataGenre.filter(item=>item.id !== 0)}
@@ -196,15 +225,36 @@ const Playlist = () => {
                   />
                 </Form.Item>
 
-                <Form.Item label="Playlist URL" name="play_url" required style={{ marginTop: '-15px' }}>
+                <Form.Item 
+                  label="Playlist URL" 
+                  name="play_url" 
+                  style={{ marginTop: '-15px' }}
+                  rules={[
+                    {required: true, message: "URL Wajib Diisi"}
+                  ]}
+                >
                   <Input style={{ fontFamily: 'Montserrat' }}/>
                 </Form.Item>
 
-                <Form.Item label="Playlist Thumbnail" name="play_thumbnail" required style={{ marginTop: '-15px' }}>
+                <Form.Item 
+                  label="Playlist Thumbnail" 
+                  name="play_thumbnail" 
+                  required style={{ marginTop: '-15px' }}
+                  rules={[
+                    {required: true, message: "Thumbanil Wajib Diisi"}
+                  ]}
+                >
                   <Input style={{ fontFamily: 'Montserrat' }}/>
                 </Form.Item>
 
-                <Form.Item label="Playlist Descriptions" name="play_description" required style={{ marginTop: '-15px' }}>
+                <Form.Item 
+                  label="Playlist Descriptions" 
+                  name="play_description" 
+                  style={{ marginTop: '-15px' }}
+                  rules={[
+                    {required: true, message: "Deskripsi Wajib Diisi"}
+                  ]}
+                >
                   <Input.TextArea rows={4} maxLength="100" style={{ fontFamily: 'Montserrat' }}/>
                 </Form.Item>
               </Form>
@@ -212,7 +262,7 @@ const Playlist = () => {
 
             <div className='bg-banner px-20'>
               <Header style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '50px 0px'}} className='bg-transparent'>
-                <img src={Logo} alt="" className='demo-logo' style={{ maxWidth: '70px' }}/>
+                <img onClick={()=>navigate('/')} src={Logo} alt="" className='demo-logo cursor-pointer' style={{ maxWidth: '70px' }}/>
                   <Avatar
                     style={{ backgroundColor: '#1677ff' }}
                     size={{ xs: 24, sm: 24, md: 30, lg: 30, xl: 40, xxl: 50 }}
@@ -261,7 +311,6 @@ const Playlist = () => {
                     dataSource={dataGenre}
                     renderItem={(item) => (
                       <List.Item>
-                        {/* <button className='bg-transparent text-white border py-1 px-5 rounded-3xl mt-1' >{item?.label}</button> */}
                         <button 
                           className={classNames(
                                   (activeTabs == item?.value ? 'bg-blue-600 border-blue-600' : 'bg-transparent' ), 
@@ -284,10 +333,10 @@ const Playlist = () => {
                       backgroundColor: 'transparent', 
                       borderRadius: '100px', 
                       color: '#fff',
-                      '--placeholder-color': '#fff',
                       fontFamily: 'Montserrat'
                     }} 
-                    size="large" placeholder="  Search Playlist. . ." 
+                    size="large" 
+                    placeholder="  Search Playlist. . ." 
                     prefix={<SearchOutlined style={{  marginRight: '5px' }}/>}         
                     onChange={handleSearchPlaylist}
                 />
@@ -299,18 +348,18 @@ const Playlist = () => {
               <List
                 style={{ marginTop: "20px" }}
                 grid={{
-                  gutter: 40,
+                  gutter: 2,
                   xs: 1,
-                  sm: 1,
+                  sm: 2,
                   md: 3,
                   lg: 3,
-                  xl: 3
+                  xl: 3,
                 }}
                 dataSource={filteredData}
                 renderItem={(item) => (
                   <List.Item>
                       <Card 
-                        className='bg-transparent border-none'
+                        className='bg-transparent border-none hover:scale-105 hover:transition-all hover:duration-150'
                         actions={[
                           <Popconfirm
                               key={item?.id_play}

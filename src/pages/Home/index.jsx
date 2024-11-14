@@ -16,18 +16,18 @@ const Home = () => {
                 <Flex align='center' justify='center' vertical>
                     <TypeAnimation
                         sequence={[
-                            'One',
-                            500,
-                            'Thre Two',
-                            500,
-                            'One Two Three',
-                            500,
-                            'One Two',
-                            500,
-                            'One',
-                            500,
-                            '',
-                            500,
+                            'Hi Theere,',
+                            200,
+                            'Hi The',
+                            200,
+                            'Hi There,',
+                            2000,
+                            'We Are',
+                            2000,
+                            'New Team',
+                            2000,
+                            'NPM INSTALL',
+                            10000,
                         ]}
                         style={{ fontSize: '3rem' }}
                         className='text-white font-bold'
