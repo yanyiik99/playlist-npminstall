@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Col, Row, Card, List, Typography, Badge, Input, Layout, FloatButton, Modal, Form, Select, notification, Popconfirm} from 'antd';
-import { SearchOutlined, PlusCircleOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Col, Row, Card, List, Typography, Badge, Input, Layout, FloatButton, Modal, Form, Select, notification, Popconfirm, Avatar} from 'antd';
+import { SearchOutlined, PlusCircleOutlined, EditOutlined, DeleteOutlined, UserOutlined } from '@ant-design/icons';
 import Logo from '../../assets/Npm-logo.svg';
 import { deleteDataUTS, getDataUTS, sendDataUTS } from '../../utils/apiuts';
 import classNames from 'classnames';
+import './index.css';
 
 const { Meta } = Card;
 const { Text, Link } = Typography;
@@ -166,12 +167,9 @@ const Playlist = () => {
       : dataPlaylist.filter((item) => item.play_genre === activeTabs);
 
   return (
-    <div className='layout-content bg-gray-950 px-20 min-h-screen'>      
+    <div className='layout-content min-h-screen'>      
     {contextHolder}
-        <Layout className='bg-gray-950'>
-          <Header style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '50px 0px'}} className='bg-gray-950'>
-            <img src={Logo} alt="" className='demo-logo' style={{ maxWidth: '70px' }}/>
-          </Header>
+        <Layout className='bg-black'>
           <Content style={{ padding: '0px'}}>
 
             <FloatButton 
@@ -181,69 +179,78 @@ const Playlist = () => {
               onClick={showModal}            
             />
 
-            <Modal title="ADD PLAYLIST" open={isModalOpen} onOk={handleSubmit} onCancel={handleCancel}>
+            <Modal title="ADD PLAYLIST" style={{ fontFamily: 'Poppins' }} open={isModalOpen} onOk={handleSubmit} onCancel={handleCancel}>
               <Form 
                 layout="vertical"
                 form={form}
               >
-                <Form.Item label="Playlist Name" name="play_name" required style={{ marginTop: '20px' }}>
-                  <Input/>
+                <Form.Item label="Playlist Name" name="play_name" required style={{ marginTop: '20px', fontFamily: 'Poppins' }}>
+                  <Input maxLength="30" style={{ fontFamily: 'Montserrat' }}/>
                 </Form.Item>
 
                 <Form.Item label="Playlist Genre" name="play_genre" required style={{ marginTop: '-15px' }}>
                   <Select
                     defaultValue="---"
                     options={dataGenre.filter(item=>item.id !== 0)}
+                    style={{ fontFamily: 'Montserrat' }}
                   />
                 </Form.Item>
 
                 <Form.Item label="Playlist URL" name="play_url" required style={{ marginTop: '-15px' }}>
-                  <Input/>
+                  <Input style={{ fontFamily: 'Montserrat' }}/>
                 </Form.Item>
 
                 <Form.Item label="Playlist Thumbnail" name="play_thumbnail" required style={{ marginTop: '-15px' }}>
-                  <Input/>
+                  <Input style={{ fontFamily: 'Montserrat' }}/>
                 </Form.Item>
 
                 <Form.Item label="Playlist Descriptions" name="play_description" required style={{ marginTop: '-15px' }}>
-                  <Input.TextArea rows={4} maxLength="100"/>
+                  <Input.TextArea rows={4} maxLength="100" style={{ fontFamily: 'Montserrat' }}/>
                 </Form.Item>
               </Form>
             </Modal>
 
-            <div className='bg-banner'>
-              <Row gutter={[24, 0]}>
-                <Col md={24} xl={12} className="mb-24">
-                    <Typography.Title 
-                        level={1}
-                        style={{
-                          marginTop: 50,
-                          color: '#fff'
-                        }}
-                        >
-                        Play, Complete, Follow Popular Streamers
-                    </Typography.Title>
+            <div className='bg-banner px-20'>
+              <Header style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '50px 0px'}} className='bg-transparent'>
+                <img src={Logo} alt="" className='demo-logo' style={{ maxWidth: '70px' }}/>
+                  <Avatar
+                    style={{ backgroundColor: '#1677ff' }}
+                    size={{ xs: 24, sm: 24, md: 30, lg: 30, xl: 40, xxl: 50 }}
+                    icon={<UserOutlined />}
+                  />
+              </Header>
 
-                    <Typography.Text 
-                        type="secondary"
-                        style={{
-                          marginTop: 50,
-                          color: '#acacac',
-                          fontSize: '18px'
-                        }}
-                        >
-                        Play, Complete, Follow Popular Streamers
-                    </Typography.Text>
-                    
-                </Col>
+              <Typography.Title 
+                  level={1}
+                  style={{
+                    marginTop: 70,
+                    color: '#fff',
+                    textAlign: 'center',
+                    fontFamily: 'Poppins',
+                    fontSize: '50px'
+                  }}
+                  >
+                  Playlists to Brighten Your Day
+              </Typography.Title>
 
-                <Col md={24} xl={12} className="mb-24">
-                  
-                </Col>
-              </Row>
+              <Typography.Title 
+                  level={5}
+                  style={{
+                    width: '60%',
+                    lineHeight: '1.8',
+                    margin: '10px auto',
+                    color: '#fff',
+                    textAlign: 'center',
+                    fontFamily: 'Montserrat',
+                    fontWeight: '300'
+                  }}
+                  >
+                  Start your day with captivating playlists! From motivation to light-hearted fun, choose your vibe and watch anytime, anywhere.
+              </Typography.Title>
+
             </div>
 
-            <div className="bg-genre">
+            <div className="bg-genre px-20">
               <Row gutter={[24, 0]}>
                 <Col md={24} xl={12} className="mb-24">              
                   <List
@@ -257,9 +264,10 @@ const Playlist = () => {
                         {/* <button className='bg-transparent text-white border py-1 px-5 rounded-3xl mt-1' >{item?.label}</button> */}
                         <button 
                           className={classNames(
-                                  (activeTabs == item?.value ? 'bg-red-500' : 'bg-transparent' ), 
+                                  (activeTabs == item?.value ? 'bg-blue-600 border-blue-600' : 'bg-transparent' ), 
                                   'text-white border py-1 px-5 rounded-3xl mt-1')} 
-                          onClick={()=>tabsFiltered(item)}    
+                          onClick={()=>tabsFiltered(item)}
+                          style={{ fontFamily: 'Montserrat',  }}    
                         >
                           {item?.label}
                         </button>
@@ -276,21 +284,22 @@ const Playlist = () => {
                       backgroundColor: 'transparent', 
                       borderRadius: '100px', 
                       color: '#fff',
-                      '--placeholder-color': '#fff'
+                      '--placeholder-color': '#fff',
+                      fontFamily: 'Montserrat'
                     }} 
                     size="large" placeholder="  Search Playlist. . ." 
-                    prefix={<SearchOutlined />}         
+                    prefix={<SearchOutlined style={{  marginRight: '5px' }}/>}         
                     onChange={handleSearchPlaylist}
                 />
                 </Col>
               </Row>
             </div>
 
-            <div className="bg-content" style={{ marginTop: '-100px' }}>
+            <div className="bg-content px-20" style={{ marginTop: '-100px' }}>
               <List
                 style={{ marginTop: "20px" }}
                 grid={{
-                  gutter: 16,
+                  gutter: 40,
                   xs: 1,
                   sm: 1,
                   md: 3,
@@ -301,7 +310,7 @@ const Playlist = () => {
                 renderItem={(item) => (
                   <List.Item>
                       <Card 
-                        hoverable 
+                        className='bg-transparent border-none'
                         actions={[
                           <Popconfirm
                               key={item?.id_play}
@@ -309,26 +318,31 @@ const Playlist = () => {
                               description={`Are you sure to delete ${item?.play_name}`}
                               okText="Hapus"
                               cancelText="Tidak"
-                              onConfirm={()=>handleDelete(item?.id_play)}
-                          >
-                              <DeleteOutlined />
+                              onConfirm={()=>handleDelete(item?.id_play)}>
+                              <Text>Delete</Text><DeleteOutlined style={{ color: '#fff' }}/>
                           </Popconfirm>,
-                          <EditOutlined key="edit" onClick={()=>handleEditData(item)} />,
+                          <EditOutlined key="edit" onClick={()=>handleEditData(item)} style={{ color: '#fff' }}/>,                          
                         ]}
-                        cover={<img className='p-4 !rounded-lg' alt="img" src={item?.play_thumbnail} />}
+                        cover={<img className='p-4' alt="img" src={item?.play_thumbnail} style={{ borderRadius: '20px' }}/>}
                       >
-                        <Badge count={item?.play_genre} showZero color="#faad14" />
+                        <Badge 
+                          count={item?.play_genre} 
+                          showZero 
+                          color="#1677ff" 
+                          style={{ fontSize: '10px', fontFamily: 'Montserrat', textTransform: 'uppercase', marginTop: '-20px', borderColor: '#1677ff' }} 
+                        />
+
                         <Meta 
                           title={
                             <Link href={item?.play_url} target='_blank'>
-                              <Typography.Title level={3} style={{marginTop: 10,}} >
+                              <Typography.Title level={4} style={{marginTop: 10, color: '#fff', fontFamily: 'Poppins'}} >
                                 {item?.play_name}
                               </Typography.Title>
                             </Link>
                           }
                           description={
                             <div style={{ marginTop: '-10px' }}>
-                              <Text type="secondary" >
+                              <Text className='text-gray-500' style={{ fontFamily: 'Montserrat', fontSize: '14px' }}>
                                 {item?.play_description}
                               </Text>
                             </div>
@@ -340,8 +354,8 @@ const Playlist = () => {
               />   
             </div>
           </Content>
-          <Footer style={{textAlign: 'center'}} className='bg-gray-950 text-white'>
-            Playlist Websites ©{new Date().getFullYear()} Created by NPM Install
+          <Footer style={{textAlign: 'center', fontFamily: 'Montserrat', marginTop: '50px'}} className='bg-black text-white'>
+            Playlist Websites © {new Date().getFullYear()} Created by NPM Install
           </Footer>
         </Layout>
 
