@@ -2,9 +2,12 @@ import { TypeAnimation } from 'react-type-animation';
 import './index.css';
 import { Row, Col, Button, Flex } from 'antd';
 import { ArrowRightOutlined} from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 
 
 const Home = () => {
+    const navigate = useNavigate();
+
   return (
     <div className="bg-homepage">
         <div className="backdrop"></div>
@@ -30,7 +33,7 @@ const Home = () => {
                         className='text-white font-bold'
                         repeat={Infinity}
                     />
-                    <Button size='large' className='my-4' type="primary" iconPosition='end' icon={<ArrowRightOutlined />}>
+                    <Button onClick={()=>navigate('/playlist')} size='large' className='my-4' type="primary" iconPosition='end' icon={<ArrowRightOutlined />}>
                         Playlist NPM INSTALL
                     </Button>
                 </Flex>

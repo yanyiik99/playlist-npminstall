@@ -31,7 +31,6 @@ export const sendDataUTS = async (url, data) => {
   if (data) {
     options.body = data;
   }
-  console.log(options);
 
   return fetch(BASE_URL + url, options)
     .then((response) =>
