@@ -17,7 +17,7 @@ const dataGenre = [
   {id: 2, label: "Song", value: "song"},
   {id: 3, label: "Movie", value: "movie"},
   {id: 4, label: "Education", value: "education"},
-  {id: 5, label: "Other", value: "other"},
+  {id: 5, label: "Others", value: "others"},
 ]
 
 const Playlist = () => {
@@ -27,7 +27,7 @@ const Playlist = () => {
   const navigate = useNavigate();
   const [api, contextHolder] = notification.useNotification();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  
   const [dataPlaylist, setDataPlaylist] = useState([]);
   const urlPlaylist = '/api/playlist/5';
   const [activeTabs, setActiveTabs] = useState("all");
@@ -61,7 +61,7 @@ const Playlist = () => {
     getDataUTS(urlPlaylist)
     .then((ress)=>{
       if(ress?.datas){
-        setIsLoading(false);
+
         setDataPlaylist(ress?.datas);
       }else{
         console.log(ress);
