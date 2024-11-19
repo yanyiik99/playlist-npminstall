@@ -7,6 +7,12 @@
     background-position: center;
 }
 
+@media (max-width: 767px){
+    .bg-banner {
+        height: 100vh;
+    }
+}
+
 .ant-card-actions{
     background-color: transparent !important;
     border: none !important;

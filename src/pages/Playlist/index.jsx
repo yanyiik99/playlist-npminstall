@@ -260,7 +260,7 @@ const Playlist = () => {
               </Form>
             </Modal>
 
-            <div className='bg-banner px-20'>
+            <div className='bg-banner px-7 md:px-20'>
               <Header style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '50px 0px'}} className='bg-transparent'>
                 <img onClick={()=>navigate('/')} src={Logo} alt="" className='demo-logo cursor-pointer' style={{ maxWidth: '70px' }}/>
                   <Avatar
@@ -277,8 +277,9 @@ const Playlist = () => {
                     color: '#fff',
                     textAlign: 'center',
                     fontFamily: 'Poppins',
-                    fontSize: '50px'
+                    // fontSize: '50px'
                   }}
+                  className='md:text-6xl'
                   >
                   Playlists to Brighten Your Day
               </Typography.Title>
@@ -305,8 +306,9 @@ const Playlist = () => {
                 <Col md={24} xl={12} className="mb-24">              
                   <List
                     grid={{
-                      gutter: 16,
-                      xs: 5,
+                      gutter: 10,
+                      xs: 2,
+                      md: 5
                     }}
                     dataSource={dataGenre}
                     renderItem={(item) => (
