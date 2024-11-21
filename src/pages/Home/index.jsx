@@ -3,6 +3,7 @@ import './index.css';
 import { Row, Col, Button, Flex } from 'antd';
 import { ArrowRightOutlined} from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import Link from 'antd/es/typography/Link';
 
 
 const Home = () => {
@@ -35,6 +36,11 @@ const Home = () => {
                     />
                     <Button onClick={()=>navigate('/playlist')} size='large' className='my-4' type="primary" iconPosition='end' icon={<ArrowRightOutlined />}>
                         Playlist NPM INSTALL
+                    </Button>
+                    <Button size='large' className='my-4' type="primary" iconPosition='end' icon={<ArrowRightOutlined />}>
+                        <Link href='https://umah-repair.vercel.app' target='_blank' className='!text-white'>
+                            Umah Repair by NPM INSTALL
+                        </Link>
                     </Button>
                 </Flex>
             </Col>

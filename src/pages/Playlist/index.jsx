@@ -29,8 +29,8 @@ const Playlist = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   
   const [dataPlaylist, setDataPlaylist] = useState([]);
-  const urlPlaylist = '/api/playlist/5';
-  const [activeTabs, setActiveTabs] = useState("all");
+  const urlPlaylist = '/api/playlist/5'; 
+  const [activeTabs, setActiveTabs] = useState("all"); 
   const [seachPlaylist, setSeachPlaylist] = useState("");
 
   // Edit State
@@ -59,12 +59,11 @@ const Playlist = () => {
 
   const getDataPlaylist = () => {
     getDataUTS(urlPlaylist)
-    .then((ress)=>{
+    .then((ress)=>{ 
       if(ress?.datas){
-
-        setDataPlaylist(ress?.datas);
+        setDataPlaylist(ress?.datas); 
       }else{
-        console.log(ress);
+        console.log(ress); 
       }
     })
     .catch((err) => {
@@ -165,7 +164,7 @@ const Playlist = () => {
 
   return (
     <div className='layout-content min-h-screen'>      
-    {contextHolder}
+      {contextHolder}
         <Layout className='bg-black'>
           <Content style={{ padding: '0px'}}>
 
