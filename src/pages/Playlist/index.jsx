@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Col, Row, Card, List, Typography, Badge, Input, Layout, FloatButton, Modal, Form, Select, notification, Popconfirm, Avatar} from 'antd';
+import { Col, Row, Card, List, Typography, Badge, Input, Layout, FloatButton, Modal, Form, Select, notification, Popconfirm, Avatar, Image} from 'antd';
 import { SearchOutlined, PlusCircleOutlined, EditOutlined, DeleteOutlined, UserOutlined } from '@ant-design/icons';
 import Logo from '../../assets/Npm-logo.svg';
 import { deleteDataUTS, getDataUTS, sendDataUTS } from '../../utils/apiuts';
@@ -373,7 +373,7 @@ const Playlist = () => {
                           </Popconfirm>,
                           <EditOutlined key="edit" onClick={()=>handleEditData(item)} style={{ color: '#fff' }}/>,                          
                         ]}
-                        cover={<img className='p-4' alt="img" src={item?.play_thumbnail} style={{ borderRadius: '20px' }}/>}
+                        cover={<Image className='p-4' alt="img" src={item?.play_thumbnail} style={{ borderRadius: '20px' }}/>}
                       >
                         <Badge 
                           count={item?.play_genre} 
